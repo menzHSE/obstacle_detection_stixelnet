@@ -52,7 +52,7 @@ def main(args):
     model.load_weights(args.model_path)
     val_set = KittiStixelDataset(
         data_path=dt_config.DATA_PATH,
-        ground_truth_path=dt_config.GROUND_TRUTH_PATH,
+        ground_truth_path=os.path.join(dt_config.DATA_PATH, "kitti_val.txt"),
         phase="val",
         batch_size=1,
         input_shape=None,

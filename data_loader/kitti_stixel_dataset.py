@@ -3,7 +3,7 @@
 import os
 import cv2
 import numpy as np
-from tensorflow.python.keras.utils.data_utils import Sequence
+from keras.utils.data_utils import Sequence
 
 
 class KittiStixelDataset(Sequence):
@@ -44,37 +44,37 @@ class KittiStixelDataset(Sequence):
             line.rstrip("\n") for line in open(self._ground_truth_path, "r")
         ]
         assert len(lines) > 0
-        lines = [line.split("\t") for line in lines]
+        lines = [line.split(" ") for line in lines]
 
         assert phase in ("train", "val")
         phase_dict = {"train": "Train", "val": "Test"}
+
         self._lines = [
             {
-                "series_data": line[0],
-                "series_id": int(line[1]),
-                "frame_id": int(line[2]),
-                "x": int(line[3]),
-                "y": int(line[4]),
-                "type": line[5],
+                "path": line[0],
+                "x": int(line[2]),
+                "y": int(line[3]),
             }
+            # Do stuff above if the phase (train or val) fits else ignore it
             for line in lines
-            if line[5] == phase_dict[phase]
         ]
         del lines
 
         self._image_dict = {}
         for line in self._lines:
-            cur_base_image_path = self._generate_image_path_from_series_info(
-                line["series_data"], line["series_id"], line["frame_id"]
-            )
+            cur_base_image_path = line["path"]
+            # if path already exist: append stixel data - one image, multiple stixels- otherwise...
             if cur_base_image_path in self._image_dict.keys():
                 self._image_dict[cur_base_image_path].append(
                     [line["x"], line["y"]]
                 )
             else:
+                # ... add a new dict entry
                 self._image_dict[cur_base_image_path] = [[line["x"], line["y"]]]
 
+        # list of all image paths
         self._image_paths = list(self._image_dict.keys())
+        # list of ground truth data (stixel position)
         self._stixels_pos = list(self._image_dict.values())
         self._indexes = np.arange(len(self._image_paths))
 
@@ -83,17 +83,6 @@ class KittiStixelDataset(Sequence):
     @property
     def batch_size(self):
         return self._batch_size
-
-    def _generate_image_path_from_series_info(
-        self, series_data, series_id, frame_id
-    ):
-        base_image_name = "{:010d}.png".format(frame_id)
-        base_image_dir = "2011_{}/2011_{}_drive_{:04d}_sync/image_02/data".format(
-            series_data, series_data, series_id
-        )
-        base_image_path = os.path.join(base_image_dir, base_image_name)
-
-        return base_image_path
 
     def __getitem__(self, idx):
         assert idx < self.__len__()
