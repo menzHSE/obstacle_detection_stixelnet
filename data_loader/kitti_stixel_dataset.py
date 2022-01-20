@@ -17,7 +17,7 @@ class KittiStixelDataset(Sequence):
         shuffle=True,
         transform=None,
         random_seed=2011,
-        input_shape=(370, 800),
+        input_shape=(1280, 1920),
         customized_transform=None,
     ):
         """
@@ -28,7 +28,7 @@ class KittiStixelDataset(Sequence):
         assert os.path.isdir(data_path)
         assert os.path.isfile(ground_truth_path)
 
-        self._data_path = os.path.join(data_path, "kitti_stixel_images")
+        self._data_path = os.path.join(data_path, "waymo_stixel_images")
         self._ground_truth_path = ground_truth_path
         self._batch_size = batch_size
         self._label_size = label_size

@@ -5,7 +5,7 @@ import tensorflow.keras.layers as layers
 import tensorflow.keras.models as models
 
 
-def build_stixel_net(input_shape=(370, 800, 3)):
+def build_stixel_net(input_shape=(1280, 1920, 3)):
     """
     input_shape -> (height, width, channel)
     """
@@ -92,9 +92,9 @@ def build_stixel_net(input_shape=(370, 800, 3)):
 
     x = layers.Dropout(0.4)(x)
 
-    x = layers.Conv2D(50, (1, 1), strides=(1, 1), activation="softmax")(x)
+    x = layers.Conv2D(160, (1, 1), strides=(1, 1), activation="softmax")(x)
 
-    x = layers.Reshape((100, 50))(x)
+    x = layers.Reshape((240, 160))(x)
 
     model = models.Model(inputs=img_input, outputs=x)
 

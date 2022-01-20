@@ -30,7 +30,7 @@ import utility
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--batch_size", type=int, default=8)
+parser.add_argument("--batch_size", type=int, default=1)
 parser.add_argument("--num_epoch", type=int, default=3)
 parsed_args = parser.parse_args()
 
@@ -58,7 +58,7 @@ def main():
     val_aug = Compose([Normalize(p=1.0)])
     train_set = KittiStixelDataset(
         data_path=dt_config.DATA_PATH,
-        ground_truth_path=os.path.join(dt_config.DATA_PATH, "kitti_train.txt"),
+        ground_truth_path=os.path.join(dt_config.DATA_PATH, "waymo_train_check.txt"),
         batch_size=parsed_args.batch_size,
         phase="train",
         transform=train_aug,
@@ -67,7 +67,7 @@ def main():
 
     val_set = KittiStixelDataset(
         data_path=dt_config.DATA_PATH,
-        ground_truth_path=os.path.join(dt_config.DATA_PATH, "kitti_val.txt"),
+        ground_truth_path=os.path.join(dt_config.DATA_PATH, "waymo_val_check.txt"),
         phase="val",
         transform=val_aug,
     )
