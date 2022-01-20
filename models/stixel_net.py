@@ -92,6 +92,13 @@ def build_stixel_net(input_shape=(1280, 1920, 3)):
 
     x = layers.Dropout(0.4)(x)
 
+    x = layers.MaxPooling2D((2, 1), strides=(2, 1))(x)
+    x = layers.ELU()(x)
+    x = layers.MaxPooling2D((2, 1), strides=(2, 1))(x)
+    x = layers.ELU()(x)
+    x = layers.MaxPooling2D((2, 1), strides=(2, 1))(x)
+    x = layers.ELU()(x)
+
     x = layers.Conv2D(160, (1, 1), strides=(1, 1), activation="softmax")(x)
 
     x = layers.Reshape((240, 160))(x)
