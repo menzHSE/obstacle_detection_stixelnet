@@ -3,3 +3,5 @@ albumentations
 matplotlib
 pykitti
 tdqm
+numpy
+opencv-contrib-python

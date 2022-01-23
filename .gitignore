@@ -88,4 +88,9 @@ GSYMS
 GTAGS
 
 saved_models
-data
+data/waymo_stixel_images
+data/kitti_stixel_images
+data/kitti_train.txt
+data/kitti_val.txt
+data/waymo_train.txt
+data/waymo_val.txt

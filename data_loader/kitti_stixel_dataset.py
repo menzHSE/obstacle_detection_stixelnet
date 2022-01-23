@@ -13,10 +13,10 @@ class KittiStixelDataset(Sequence):
         ground_truth_path,
         phase="train",
         batch_size=10,
-        label_size=(100, 50),
+        label_size=(240, 160),
         shuffle=True,
         transform=None,
-        random_seed=2011,
+        random_seed=2019,
         input_shape=(1280, 1920),
         customized_transform=None,
     ):

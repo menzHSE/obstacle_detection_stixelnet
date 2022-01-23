@@ -30,7 +30,7 @@ import utility
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--batch_size", type=int, default=1)
+parser.add_argument("--batch_size", type=int, default=16)
 parser.add_argument("--num_epoch", type=int, default=3)
 parsed_args = parser.parse_args()
 
