@@ -115,3 +115,10 @@ reshape (Reshape)            (None, 240, 160)          0
 Total params: 31,629,792
 Trainable params: 31,629,792
 Non-trainable params: 0
+
+
+Training Test:::
+
+624/624 [==============================] - ETA: 0s - loss: nan2022-01-24 09:59:19.541101: F tensorflow/stream_executor/cuda/cuda_dnn.cc:573] Check failed: cudnnSetTensorNdDescriptor(handle_.get(), elem_type, nd, dims.data(), strides.data()) == CUDNN_STATUS_SUCCESS (9 vs. 0)batch_descriptor: {count: 16 feature_map_count: 64 spatial: 1280 1920  value_min: 0.000000 value_max: 0.000000 layout: BatchDepthYX}
+Aborted (core dumped)
+[es_mavossh@uc2n510 obstacle_detection_stixelnet]$ 
