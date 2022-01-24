@@ -9,7 +9,7 @@ import keras.backend as K
 
 class StixelLoss(Loss):
     def __init__(
-        self, num_bins=50, alpha=1.0, epsilon=0.0001, label_size=(100, 50)
+        self, num_bins=160, alpha=1.0, epsilon=0.001, label_size=(240, 160)
     ):
         super(StixelLoss, self).__init__(name="stixel_loss")
         self._num_bins = num_bins
