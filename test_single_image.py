@@ -6,7 +6,7 @@ import numpy as np
 import cv2
 import tqdm as tqdm
 from models import build_stixel_net
-from data_loader import KittiStixelDataset
+from data_loader import WaymoStixelDataset
 from albumentations import (
     Compose,
     Resize,
@@ -50,7 +50,7 @@ def main(args):
     dt_config = Config()
     model = build_stixel_net()
     model.load_weights(args.model_path)
-    val_set = KittiStixelDataset(
+    val_set = WaymoStixelDataset(
         data_path=dt_config.DATA_PATH,
         ground_truth_path=os.path.join(dt_config.DATA_PATH, "kitti_val.txt"),
         phase="val",

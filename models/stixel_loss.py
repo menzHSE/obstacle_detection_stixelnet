@@ -9,7 +9,7 @@ import keras.backend as K
 
 class StixelLoss(Loss):
     def __init__(
-        self, num_bins=160, alpha=1.0, epsilon=0.001, label_size=(240, 160)
+        self, num_bins=160, alpha=1.0, epsilon=0.0001, label_size=(240, 160)
     ):
         super(StixelLoss, self).__init__(name="stixel_loss")
         self._num_bins = num_bins
@@ -25,11 +25,7 @@ class StixelLoss(Loss):
 
         have_target, stixel_pos = tf.split(target, 2, axis=-1)
         stixel_pos = stixel_pos - 0.5
-        stixel_pos = (
-            (stixel_pos - tf.math.floor(stixel_pos))
-            + tf.math.floor(stixel_pos)
-            + self._epsilon
-        )
+        stixel_pos = ((stixel_pos - tf.math.floor(stixel_pos)) + tf.math.floor(stixel_pos) + self._epsilon)
 
         fp = tf.gather(
             predict,

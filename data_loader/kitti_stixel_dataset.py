@@ -6,13 +6,31 @@ import numpy as np
 from keras.utils.data_utils import Sequence
 
 
-class KittiStixelDataset(Sequence):
+def visualize_stixel(
+        image,
+    stixel_pos,
+    stixel_width=5,
+    stixel_height=100,
+    color=(0, 255, 0),
+):
+    result = np.copy(image)
+    [
+        cv2.rectangle(
+            result, (x, y - stixel_height), (x + stixel_width, y), color
+        )
+        for (x, y) in stixel_pos
+    ]
+
+    return result
+
+
+class WaymoStixelDataset(Sequence):
     def __init__(
         self,
         data_path,
         ground_truth_path,
-        phase="train",
-        batch_size=10,
+        # phase="train",
+        batch_size=1,
         label_size=(240, 160),
         shuffle=True,
         transform=None,
@@ -23,7 +41,7 @@ class KittiStixelDataset(Sequence):
         """
         input_shape->(height,width)
         """
-        super(KittiStixelDataset, self).__init__()
+        super(WaymoStixelDataset, self).__init__()
 
         assert os.path.isdir(data_path)
         assert os.path.isfile(ground_truth_path)
@@ -46,14 +64,14 @@ class KittiStixelDataset(Sequence):
         assert len(lines) > 0
         lines = [line.split(" ") for line in lines]
 
-        assert phase in ("train", "val")
-        phase_dict = {"train": "Train", "val": "Test"}
+        # assert phase in ("train", "val")
+        # phase_dict = {"train": "Train", "val": "Test"}
 
         self._lines = [
             {
                 "path": line[0],
-                "x": int(line[2]),
-                "y": int(line[3]),
+                "x": int(line[1]),
+                "y": int(line[2]),
             }
             # Do stuff above if the phase (train or val) fits else ignore it
             for line in lines
@@ -126,7 +144,7 @@ class KittiStixelDataset(Sequence):
             y.append(target)
 
         X = np.stack(X, axis=0)
-        y = np.stack(y, axis=0)
+        y = np.stack(y, axis=0).astype('float32')
 
         return X, y
 
@@ -136,12 +154,15 @@ class KittiStixelDataset(Sequence):
         positions = np.array(self._stixels_pos[idx], dtype=np.float32)
         height, width = img.shape[:2]
 
+        # Normalized
         positions[:, 0] = positions[:, 0] / width
         positions[:, 1] = positions[:, 1] / height
 
         colnum, binnum = self._label_size
         have_gt = np.zeros((colnum), dtype=np.int)
         gt = np.zeros((colnum), dtype=np.float32)
+
+
 
         for point in positions:
             col_idx = int(point[0] * colnum)
@@ -153,31 +174,17 @@ class KittiStixelDataset(Sequence):
                 gt[col_idx] = row_idx
                 have_gt[col_idx] = 1
 
-        gt = np.clip(gt, 0.51, 49.49)
+        # ???
+        # https://numpy.org/doc/stable/reference/generated/numpy.clip.html
+        # @stixel_loss stixel_pos = stixel_pos - 0.5
+        # 0.1- 48.99 (0.51, 49.49)
+        # gt = np.clip(gt, 0.51, 159.49)
 
         return np.stack((have_gt, gt), axis=1)
 
     def on_epoch_end(self):
         if self._shuffle:
             np.random.shuffle(self._indexes)
-
-    def visualize_stixel(
-        self,
-        image,
-        stixel_pos,
-        stixel_width=5,
-        stixel_height=100,
-        color=(0, 255, 0),
-    ):
-        result = np.copy(image)
-        [
-            cv2.rectangle(
-                result, (x, y - stixel_height), (x + stixel_width, y), color
-            )
-            for (x, y) in stixel_pos
-        ]
-
-        return result
 
     def visualize_one_image(self, idx):
         img = cv2.imread(
@@ -191,4 +198,13 @@ class KittiStixelDataset(Sequence):
 
         stixel_pos = self._stixels_pos[idx * self._batch_size]
 
-        return self.visualize_stixel(img, stixel_pos)
+        return visualize_stixel(img, stixel_pos)
+
+    def get_target(self, idx):
+        return self._generate_label_image(idx)
+
+    def get_stixel_pos(self, idx):
+        return self._stixels_pos[idx]
+
+    def get_idx_list(self):
+        return self._indexes

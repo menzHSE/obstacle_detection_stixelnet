@@ -23,7 +23,7 @@ from albumentations import (
 import os
 import numpy as np
 from config import Config
-from data_loader import KittiStixelDataset
+from data_loader import WaymoStixelDataset
 from models import StixelLoss, build_stixel_net
 import utility
 
@@ -56,7 +56,7 @@ def main():
     )
 
     val_aug = Compose([Normalize(p=1.0)])
-    train_set = KittiStixelDataset(
+    train_set = WaymoStixelDataset(
         data_path=dt_config.DATA_PATH,
         ground_truth_path=os.path.join(dt_config.DATA_PATH, "waymo_train.txt"),
         batch_size=parsed_args.batch_size,
@@ -65,7 +65,7 @@ def main():
         customized_transform=utility.HorizontalFlip(p=0.5),
     )
 
-    val_set = KittiStixelDataset(
+    val_set = WaymoStixelDataset(
         data_path=dt_config.DATA_PATH,
         ground_truth_path=os.path.join(dt_config.DATA_PATH, "waymo_val.txt"),
         phase="val",
