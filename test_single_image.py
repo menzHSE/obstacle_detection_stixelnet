@@ -22,11 +22,11 @@ parser.add_argument("--model_path", required=True)
 parsed_args = parser.parse_args()
 
 
-def test_single_image(model, img, label_size=(100, 50)):
+def test_single_image(model, img, label_size=(240, 160)):
     assert img is not None
 
     h, w, c = img.shape
-    val_aug = Compose([Resize(370, 800), Normalize(p=1.0)])
+    val_aug = Compose([Resize(1280, 1920), Normalize(p=1.0)])
     aug_img = val_aug(image=img)["image"]
     aug_img = aug_img[np.newaxis, :]
     predict = model.predict(aug_img, batch_size=1)
@@ -34,9 +34,9 @@ def test_single_image(model, img, label_size=(100, 50)):
     predict = K.eval(K.argmax(predict, axis=-1))
 
     for x, py in enumerate(predict):
-        x0 = int(x * w / 100)
-        x1 = int((x + 1) * w / 100)
-        y = int((py + 0.5) * h / 50)
+        x0 = int(x * w / 240)
+        x1 = int((x + 1) * w / 160)
+        y = int((py + 0.5) * h / 160)
         cv2.rectangle(img, (x0, 0), (x1, y), (0, 0, 255), 1)
 
     return img
@@ -52,8 +52,7 @@ def main(args):
     model.load_weights(args.model_path)
     val_set = WaymoStixelDataset(
         data_path=dt_config.DATA_PATH,
-        ground_truth_path=os.path.join(dt_config.DATA_PATH, "kitti_val.txt"),
-        phase="val",
+        ground_truth_path=os.path.join(dt_config.DATA_PATH, "waymo_val.txt"),
         batch_size=1,
         input_shape=None,
     )
@@ -62,17 +61,7 @@ def main(args):
         100,
         156,
         145,
-        200,
-        250,
-        300,
-        400,
-        500,
-        424,
-        543,
-        567,
-        600,
-        632,
-        700,
+        200
     )
     for i, idx in tqdm.tqdm(enumerate(indices)):
         img, _ = val_set[idx]
