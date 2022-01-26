@@ -38,9 +38,7 @@ class StixelLoss(Loss):
             batch_dims=-1,
         )
 
-        p = fp * (tf.math.ceil(stixel_pos) - stixel_pos) + cp * (
-            stixel_pos - tf.math.floor(stixel_pos)
-        )
+        p = fp * (tf.math.ceil(stixel_pos) - stixel_pos) + cp * (stixel_pos - tf.math.floor(stixel_pos))
 
         loss = -K.log(p) * have_target
         loss = K.sum(loss) / K.sum(have_target)

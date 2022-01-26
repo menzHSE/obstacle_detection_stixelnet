@@ -163,7 +163,6 @@ class WaymoStixelDataset(Sequence):
         gt = np.zeros((colnum), dtype=np.float32)
 
 
-
         for point in positions:
             col_idx = int(point[0] * colnum)
             row_idx = point[1] * binnum
@@ -178,7 +177,7 @@ class WaymoStixelDataset(Sequence):
         # https://numpy.org/doc/stable/reference/generated/numpy.clip.html
         # @stixel_loss stixel_pos = stixel_pos - 0.5
         # 0.1- 48.99 (0.51, 49.49)
-        # gt = np.clip(gt, 0.51, 159.49)
+        gt = np.clip(gt, 0.51, 159.49)
 
         return np.stack((have_gt, gt), axis=1)
 
