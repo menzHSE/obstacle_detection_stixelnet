@@ -26,6 +26,8 @@ def test_single_image(model, img, label_size=(240, 160)):
     assert img is not None
 
     h, w, c = img.shape
+    color = (0, 0, 255)
+    thickness = 1
     val_aug = Compose([Resize(1280, 1920), Normalize(p=1.0)])
     aug_img = val_aug(image=img)["image"]
     aug_img = aug_img[np.newaxis, :]
@@ -35,10 +37,12 @@ def test_single_image(model, img, label_size=(240, 160)):
 
     for x, py in enumerate(predict):
         x0 = int(x * w / 240)
-        x1 = int((x + 1) * w / 160)
+        x1 = int(x0 + w/label_size[0])
+        start_point = (x0, 0)
         y = int((py + 0.5) * h / 160)
-        cv2.rectangle(img, (x0, 0), (x1, y), (0, 0, 255), 1)
-
+        end_point = (x1, y)
+        # paints from top-left to bottom-right
+        cv2.rectangle(img, start_point, end_point, color, thickness)
     return img
 
 
@@ -58,10 +62,15 @@ def main(args):
     )
 
     indices = (
-        100,
-        156,
-        145,
-        200
+        20,
+        42,
+        222,
+        333,
+        404,
+        576,
+        777,
+        840,
+        991
     )
     for i, idx in tqdm.tqdm(enumerate(indices)):
         img, _ = val_set[idx]
