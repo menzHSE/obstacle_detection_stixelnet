@@ -41,7 +41,7 @@ model weights will be saved into ./saved_models directory
 
 - Test on an image
 ```bash
-    t.b.d.
+  python3 ./test_single_image.py --model_path [path/to/model/weights]
 ```
 
 ## Sample Result ##
