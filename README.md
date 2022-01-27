@@ -22,7 +22,7 @@ from the Waymo Open Dataset. A training/val and testing set can be provided on d
 ## StixelNet Model ##
 ***
 
-![StixelNet](./docs/images/network.png)
+ t.b.d.
 
 ## Training ##
 After downloading the dataset, run
