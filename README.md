@@ -1,12 +1,14 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Obstacle Detection With StixelNet #
+The repository is a fork of the original project by xmba15 and provides an adapted workaround for a training with data
+from the Waymo Open Dataset. A training/val and testing set can be provided on demand.
 
 ## Dependencies ##
 - tested on the following environment:
-  + OS: tested on Ubuntu 18.04
-  + Tensorflow 2.0.0
-  + python 3.6
+  + OS: tested on Ubuntu 20.04
+  + Tensorflow 2.6.0
+  + python 3.8
 - installing the dependencies:
   + python3 -m pip install -r requirements.txt
 
@@ -16,13 +18,6 @@
 ### [Ground Truth](https://sites.google.com/view/danlevi/datasets)
 - Sample of automatically generated ground truth from velodyne pointclouds
 ![Sample](./docs/images/sample_ground_truth.jpg)
-
-### Downloading the customized dataset for this repository ###
-
-```bash
-    python3 ./scripts/download_kitti_stixels.py
-```
-*the dataset is about 5.4G, so would take sometime until finishing downloading.*
 
 ## StixelNet Model ##
 ***
@@ -41,12 +36,12 @@ model weights will be saved into ./saved_models directory
 
 - Download pretrained model weights with
 ```bash
-    python3 ./scripts/download_kitti_stixels_model_weights.py
+    t.b.d.
 ```
 
 - Test on an image
 ```bash
-    python3 ./test_single_image.py --model_path [path/to/model/weights]
+    t.b.d.
 ```
 
 ## Sample Result ##

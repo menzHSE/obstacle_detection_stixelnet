@@ -62,15 +62,15 @@ def main(args):
     )
 
     indices = (
-        20,
-        42,
-        222,
-        333,
-        404,
-        576,
-        777,
-        840,
-        991
+        80,
+        112,
+        278,
+        300,
+        460,
+        511,
+        666,
+        801,
+        900
     )
     for i, idx in tqdm.tqdm(enumerate(indices)):
         img, _ = val_set[idx]
