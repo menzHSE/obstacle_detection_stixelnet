@@ -31,13 +31,15 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--batch_size", type=int, default=1)
-parser.add_argument("--num_epoch", type=int, default=3)
+parser.add_argument("--num_epoch", type=int, default=11)
+parser.add_argument("--load_checkpoint", type=str, default='')
 parsed_args = parser.parse_args()
 
 
 def main():
     dt_config = Config()
     dt_config.display()
+    starting_ckeckpoint_epoch = 11
 
     train_aug = Compose(
         [
@@ -75,7 +77,7 @@ def main():
     opt = optimizers.Adam(0.0001)
     callbacks = [
         ModelCheckpoint(
-            os.path.join(dt_config.SAVED_MODELS_PATH, "model-{epoch:03d}.h5"),
+            os.path.join(dt_config.SAVED_MODELS_PATH, "model-{epoch:03d}-{loss:.4f}.h5"),
             monitor="val_loss",
             verbose=1,
             save_best_only=True,
@@ -97,6 +99,10 @@ def main():
 
     model.compile(loss=loss_func, optimizer=opt)
     model.summary()
+
+    if parsed_args.load_checkpoint != '':
+        assert os.path.isfile(parsed_args.load_checkpoint)
+        model.load_weights(parsed_args.load_checkpoint)
 
     history = model.fit_generator(
         train_set,
