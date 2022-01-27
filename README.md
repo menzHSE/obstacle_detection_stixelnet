@@ -13,10 +13,11 @@ from the Waymo Open Dataset. A training/val and testing set can be provided on d
   + python3 -m pip install -r requirements.txt
 
 ## Training Data  ##
-### Kitti Raw Dataset ###
+### Waymo Raw Dataset ###
 
-### [Ground Truth](https://sites.google.com/view/danlevi/datasets)
-- Sample of automatically generated ground truth from velodyne pointclouds
+### Ground Truth
+- Sample of automatically generated ground truth from LiDAR pointclouds
+- [Scalability in Perception for Autonomous Driving: Waymo Open Dataset](https://arxiv.org/pdf/1912.04838)
 ![Sample](./docs/images/sample_ground_truth.jpg)
 
 ## StixelNet Model ##
