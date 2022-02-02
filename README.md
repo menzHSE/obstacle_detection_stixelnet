@@ -20,10 +20,9 @@ from the Waymo Open Dataset. A training/val and testing set can be provided on d
 - [Scalability in Perception for Autonomous Driving: Waymo Open Dataset](https://arxiv.org/pdf/1912.04838)
 ![Sample](./docs/images/sample_ground_truth.jpg)
 
-## StixelNet Model ##
+## Adapted StixelNet Model ##
 ***
-
- t.b.d.
+![Model](./docs/images/network_waymo.png)
 
 ## Training ##
 After downloading the dataset, run
