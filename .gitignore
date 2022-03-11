@@ -94,3 +94,4 @@ data/kitti_train.txt
 data/kitti_val.txt
 data/waymo_train.txt
 data/waymo_val.txt
+data/StixelNet_Waymo

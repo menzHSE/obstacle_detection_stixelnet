@@ -9,10 +9,12 @@ from keras.utils.data_utils import Sequence
 def visualize_stixel(
         image,
     stixel_pos,
-    stixel_width=5,
-    stixel_height=100,
-    color=(0, 255, 0),
+    stixel_width=8,
+    stixel_height=8,
+    color=(0, 255, 255),
 ):
+    
+    # points
     result = np.copy(image)
     [
         cv2.rectangle(
@@ -20,6 +22,9 @@ def visualize_stixel(
         )
         for (x, y) in stixel_pos
     ]
+    
+    # connecting line
+    
 
     return result
 
@@ -31,12 +36,13 @@ class WaymoStixelDataset(Sequence):
         ground_truth_path,
         # phase="train",
         batch_size=1,
-        label_size=(240, 160),
+        label_size=(240, 1),
         shuffle=True,
         transform=None,
         random_seed=2019,
         input_shape=(1280, 1920),
         customized_transform=None,
+        horizonYCoord = 550
     ):
         """
         input_shape->(height,width)
@@ -46,7 +52,7 @@ class WaymoStixelDataset(Sequence):
         assert os.path.isdir(data_path)
         assert os.path.isfile(ground_truth_path)
 
-        self._data_path = os.path.join(data_path, "waymo_stixel_images")
+        self._data_path = os.path.join(data_path)
         self._ground_truth_path = ground_truth_path
         self._batch_size = batch_size
         self._label_size = label_size
@@ -54,6 +60,7 @@ class WaymoStixelDataset(Sequence):
         self._transform = transform
         self._input_shape = input_shape
         self._customized_transform = customized_transform
+        self._horizonYCoord = horizonYCoord
 
         # each line in ground truth contains the following information
         # series_date series_id frame_id x y point_type(Train/Test)
@@ -145,18 +152,23 @@ class WaymoStixelDataset(Sequence):
 
         X = np.stack(X, axis=0)
         y = np.stack(y, axis=0).astype('float32')
+        y = y[0,:,1]
 
         return X, y
 
     def _generate_label_image(self, idx):
         img = cv2.imread(os.path.join(self._data_path, self._image_paths[idx]))
+        
+        #print("Path: " + os.path.join(self._data_path, self._image_paths[idx]))
 
         positions = np.array(self._stixels_pos[idx], dtype=np.float32)
         height, width = img.shape[:2]
+        
+        #print("Height, Width" + str(img.shape[:2]))
 
         # Normalized
         positions[:, 0] = positions[:, 0] / width
-        positions[:, 1] = positions[:, 1] / height
+        positions[:, 1] = positions[:, 1]# / height
 
         colnum, binnum = self._label_size
         have_gt = np.zeros((colnum), dtype=np.int)
@@ -177,9 +189,11 @@ class WaymoStixelDataset(Sequence):
         # https://numpy.org/doc/stable/reference/generated/numpy.clip.html
         # @stixel_loss stixel_pos = stixel_pos - 0.5
         # 0.1- 48.99 (0.51, 49.49)
-        gt = np.clip(gt, 0.51, 159.49)
+        
+        gt = np.clip(gt, self._horizonYCoord, self._input_shape[0])
 
         return np.stack((have_gt, gt), axis=1)
+       
 
     def on_epoch_end(self):
         if self._shuffle:

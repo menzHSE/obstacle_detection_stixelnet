@@ -83,21 +83,32 @@ def build_stixel_net(input_shape=(1280, 1920, 3)):
 
     x = layers.Dropout(0.4)(x)
 
-    x = layers.Conv2D(2048, (3, 1), strides=(1, 1), padding="valid")(x)
+    #x = layers.Conv2D(2048, (3, 1), strides=(1, 1), padding="valid")(x)
+    #x = layers.ELU()(x)
+    #x = layers.MaxPooling2D((2, 1), strides=(2, 1))(x)
+    #x = layers.Conv2D(2048, (1, 3), strides=(1, 1), padding="same")(x)
+    #x = layers.ELU()(x)
+    #x = layers.MaxPooling2D((2, 1), strides=(2, 1))(x)
+    #x = layers.Conv2D(2048, (1, 1), strides=(1, 1))(x)
+    #x = layers.ELU()(x)
+    #x = layers.MaxPooling2D((2, 1), strides=(2, 1))(x)
+    
+    
+    x = layers.Conv2D(256, (3, 1), strides=(1, 1), padding="valid")(x)
     x = layers.ELU()(x)
     x = layers.MaxPooling2D((2, 1), strides=(2, 1))(x)
-    x = layers.Conv2D(2048, (1, 3), strides=(1, 1), padding="same")(x)
+    x = layers.Conv2D(256, (1, 3), strides=(1, 1), padding="same")(x)
     x = layers.ELU()(x)
     x = layers.MaxPooling2D((2, 1), strides=(2, 1))(x)
-    x = layers.Conv2D(2048, (1, 1), strides=(1, 1))(x)
+    x = layers.Conv2D(256, (1, 1), strides=(1, 1))(x)
     x = layers.ELU()(x)
     x = layers.MaxPooling2D((2, 1), strides=(2, 1))(x)
 
     x = layers.Dropout(0.4)(x)
 
-    x = layers.Conv2D(160, (1, 1), strides=(1, 1), activation="softmax")(x)
+    x = layers.Conv2D(1, (1, 1), strides=(1, 1))(x)
 
-    x = layers.Reshape((240, 160))(x)
+    x = layers.Reshape((240, 1))(x)
 
     model = models.Model(inputs=img_input, outputs=x)
 

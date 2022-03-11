@@ -9,12 +9,12 @@ class Config(object):
     def __init__(self):
         self.CURRENT_DIR = _CURRENT_DIR
 
-        self.DATA_PATH = os.path.abspath(os.path.join(_CURRENT_DIR, "data"))
+        self.DATA_PATH = os.path.abspath(os.path.join(_CURRENT_DIR, "data", "StixelNet_Waymo"))
 
         # Stixel ground truth from the following third party dataset:
         # https://sites.google.com/view/danlevi/datasets
         self.GROUND_TRUTH_PATH = os.path.join(
-            self.DATA_PATH, "StixelsGroundTruth.txt"
+            self.DATA_PATH, "waymo_train.txt"
         )
 
         self.SAVED_MODELS_PATH = "saved_models"

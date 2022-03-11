@@ -7,6 +7,8 @@ from keras.losses import Loss
 import keras.backend as K
 
 
+## NOT USED FOR REGRESSION SETUP
+
 class StixelLoss(Loss):
     def __init__(
         self, num_bins=160, alpha=1.0, epsilon=0.0001, label_size=(240, 160)
