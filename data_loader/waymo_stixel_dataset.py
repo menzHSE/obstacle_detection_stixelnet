@@ -3,7 +3,7 @@
 import os
 import cv2
 import numpy as np
-from keras.utils.data_utils import Sequence
+from tensorflow.keras.utils import Sequence
 
 
 def visualize_stixel(
@@ -152,7 +152,7 @@ class WaymoStixelDataset(Sequence):
 
         X = np.stack(X, axis=0)
         y = np.stack(y, axis=0).astype('float32')
-        y = y[0,:,1]
+        y = y[:,:,1]
 
         return X, y
 
