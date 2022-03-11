@@ -216,7 +216,7 @@ def build_stixel_net_inceptionV3(input_shape=(1280,1920,3)):
     base_model = tf.keras.applications.InceptionResNetV2(input_shape=target_shape,
                                                include_top=False,
                                                weights='imagenet')
-    base_model.trainable = True
+    base_model.trainable = False
 
     preprocess_input = tf.keras.applications.inception_resnet_v2.preprocess_input
 
@@ -227,10 +227,10 @@ def build_stixel_net_inceptionV3(input_shape=(1280,1920,3)):
 
     x = layers.Flatten()(x)
     x = layers.BatchNormalization()(x)
-    x = layers.Dense(256, activation='relu')(x)
+    x = layers.Dense(128, activation='relu')(x)
     x = layers.Dropout(0.3)(x)
     x = layers.BatchNormalization()(x)
-    x = layers.Dense(512, activation='relu')(x)
+    x = layers.Dense(128, activation='relu')(x)
     x = layers.Dropout(0.3)(x)
     x = layers.BatchNormalization()(x)
     x = layers.Dense(240)(x)   
