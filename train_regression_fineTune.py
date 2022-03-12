@@ -37,9 +37,10 @@ from albumentations import (
 
 import utility
 import importlib
-from models.stixel_net import build_stixel_net_inceptionV3
+from models.stixel_net import build_stixel_net_inceptionV3, build_stixel_net_small, build_stixel_net
 
 # TensorFlow
+import tensorflow as tf
 from tensorflow.keras import losses
 from tensorflow.keras import optimizers
 from tensorflow.keras.callbacks import (
@@ -82,7 +83,7 @@ train_aug = Compose(
 train_set = WaymoStixelDataset(
         data_path=dt_config.DATA_PATH,
         ground_truth_path=os.path.join(dt_config.DATA_PATH, "waymo_train.txt"),
-        batch_size=8,
+        batch_size=4,
         transform=None,
         customized_transform=utility.HorizontalFlip(p=0.5),
     )
@@ -101,18 +102,28 @@ val_set = WaymoStixelDataset(
 # In[4]:
 
 
-# StixelNet regression setup
-
-
-model = build_stixel_net_inceptionV3()
-opt = optimizers.Adam()
-lossF = losses.MeanSquaredError()
-
-model.compile(loss=lossF, optimizer=opt)
-model.summary()
+def custom_loss(y_actual,y_pred):
+ 
+    mask = tf.cast(tf.math.less(y_actual, tf.constant([1000000000.0])), dtype=tf.float32)    
+    custom_loss=tf.reduce_mean(tf.math.abs( tf.math.multiply( (y_actual-y_pred), mask)), axis=-1)  
+    return custom_loss
 
 
 # In[5]:
+
+
+# StixelNet regression setup
+
+#model = build_stixel_net_inceptionV3()
+model = build_stixel_net()
+opt = optimizers.Adam()
+#lossF = losses.MeanSquaredError()
+
+model.compile(loss=custom_loss, optimizer=opt)
+model.summary()
+
+
+# In[6]:
 
 
 X,y = train_set[0]
@@ -120,7 +131,7 @@ print(np.shape(X))
 print(np.shape(y))
 
 
-# In[6]:
+# In[7]:
 
 
 # Training
