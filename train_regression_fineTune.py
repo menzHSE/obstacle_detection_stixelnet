@@ -105,7 +105,7 @@ val_set = WaymoStixelDataset(
 
 
 model = build_stixel_net_inceptionV3()
-opt = optimizers.Adam(0.01)
+opt = optimizers.Adam()
 lossF = losses.MeanSquaredError()
 
 model.compile(loss=lossF, optimizer=opt)
