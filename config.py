@@ -17,7 +17,7 @@ class Config(object):
             self.DATA_PATH, "waymo_train.txt"
         )
 
-        self.SAVED_MODELS_PATH = "saved_models"
+        self.SAVED_MODELS_PATH = "saved_models_l2"
         if not os.path.isdir(self.SAVED_MODELS_PATH):
             os.system("mkdir -p {}".format(self.SAVED_MODELS_PATH))
 

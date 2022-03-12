@@ -152,7 +152,7 @@ class WaymoStixelDataset(Sequence):
 
         X = np.stack(X, axis=0)
         y = np.stack(y, axis=0).astype('float32')
-        y = y[:,:,1]
+        y = y[:,:,1] / self._input_shape[0]
 
         return X, y
 
@@ -172,6 +172,7 @@ class WaymoStixelDataset(Sequence):
 
         colnum, binnum = self._label_size
         have_gt = np.zeros((colnum), dtype=np.int)
+        #gt = np.full((colnum), 1000000001.0, dtype=np.float32)
         gt = np.full((colnum), 1000000001.0, dtype=np.float32)
 
 

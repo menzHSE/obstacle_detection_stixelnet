@@ -104,7 +104,7 @@ val_set = WaymoStixelDataset(
 
 def custom_loss(y_actual,y_pred):
  
-    mask = tf.cast(tf.math.less(y_actual, tf.constant([1000000000.0])), dtype=tf.float32)    
+    mask = tf.cast(tf.math.less(y_actual, tf.constant([2.0])), dtype=tf.float32)    
     custom_loss=tf.reduce_mean(tf.math.abs( tf.math.multiply( (y_actual-y_pred), mask)), axis=-1)  
     return custom_loss
 
@@ -116,7 +116,7 @@ def custom_loss(y_actual,y_pred):
 
 #model = build_stixel_net_inceptionV3()
 model = build_stixel_net()
-opt = optimizers.Adam()
+opt = optimizers.Adam(0.0001)
 #lossF = losses.MeanSquaredError()
 
 model.compile(loss=custom_loss, optimizer=opt)
